@@ -1,0 +1,16 @@
+﻿{
+  CustomerName: John,
+  CustomerEmail: john@example.com,
+  Items: [
+    {
+      ProductId: Guid_1,
+      ProductName: Laptop,
+      UnitPrice: 500.0,
+      Quantity: 3,
+      LineTotal: 1500.0
+    }
+  ],
+  Subtotal: 1500.0,
+  Discount: 100.0,
+  Total: 1400.0
+}
