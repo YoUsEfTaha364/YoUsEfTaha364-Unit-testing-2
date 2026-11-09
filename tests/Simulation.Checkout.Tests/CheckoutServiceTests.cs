@@ -5,7 +5,7 @@ using Simulation.Checkout.Application;
 using Simulation.Checkout.Application.Abstractions;
 using Simulation.Checkout.Domain;
 using Simulation.Checkout.Domain.Exceptions;
-
+using Simulation.Checkout.Tests.TestData;
 namespace Simulation.Checkout.Tests;
 
 public class CheckoutServiceTests
@@ -276,6 +276,59 @@ public async Task CheckoutAsync_WhenOrderValidationFails_ShouldNotCallDependenci
             It.IsAny<CheckoutReceipt>(),
             It.IsAny<CancellationToken>()),
         Times.Never);
+}
+
+
+
+
+
+[Fact]
+public async Task CheckoutAsync_WhenOrderIsCreatedByAutoFixture_ShouldSucceed()
+{
+    // Arrange
+    var orderFixture = new OrderFixture();
+    var order = orderFixture.CreateValidOrder();
+
+    // Act
+    var receipt = await _sut.CheckoutAsync(order);
+
+    // Assert
+    receipt.Should().NotBeNull();
+    receipt.Items.Should().HaveCount(3);
+    receipt.Items.Should().OnlyContain(x => x.Quantity > 0);
+    receipt.Items.Should().OnlyContain(x => x.UnitPrice >= 0);
+}
+
+
+[Fact]
+public async Task CheckoutAsync_WhenCustomerIsGeneratedByBogus_ShouldPreserveCustomerData()
+{
+    // Arrange
+    var customerFaker = new CustomerFaker();
+    var customer = customerFaker.Generate();
+
+    var order = new Order
+    {
+        CustomerName = customer.Name,
+        CustomerEmail = customer.Email,
+        Items = new List<OrderItem>
+        {
+            new()
+            {
+                ProductId = Guid.NewGuid(),
+                ProductName = "Laptop",
+                UnitPrice = 500m,
+                Quantity = 1
+            }
+        }
+    };
+
+    // Act
+    var receipt = await _sut.CheckoutAsync(order);
+
+    // Assert
+    receipt.CustomerName.Should().Be(customer.Name);
+    receipt.CustomerEmail.Should().Be(customer.Email);
 }
 
 
