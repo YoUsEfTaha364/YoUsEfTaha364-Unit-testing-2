@@ -1,0 +1,45 @@
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Test results
+TestResults/
+**/TestResults/
+*.trx
+
+# Coverage temporary files
+*.coverage
+*.coveragexml
+coverage.cobertura.xml
+
+# IDE - Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE - VS Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.log
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Verify.Xunit
+*.received.txt
